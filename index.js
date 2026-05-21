@@ -39,7 +39,7 @@ app.get('/', async (req, res) => {
 
     try {
         // Παίρνουμε όλα τα μηνύματα, με τα πιο πρόσφατα πρώτα
-        const result = await pool.query('SELECT username, text, to_char(created_at, \'DD/MM HH:MI\') as time FROM messages ORDER BY id DESC');
+        const result = await pool.query("SELECT username, text, to_char(created_at, 'DD/MM HH:MI') as time FROM messages ORDER BY id DESC");
         
         if (result.rows.length === 0) {
             messagesHTML = `<p style="color: #777; font-style: italic;">Δεν υπάρχουν μηνύματα ακόμα. Γράψε το πρώτο!</p>`;
@@ -112,4 +112,11 @@ app.post('/add-message', async (req, res) => {
         console.error("Αποτυχία αποθήκευσης μηνύματος:", err);
     }
 
-    // Μόλις αποθηκευτεί, ξαναστέλνουμε τον χρήστη στην αρχική
+    // Μόλις αποθηκευτεί, ξαναστέλνουμε τον χρήστη στην αρχική σελίδα
+    res.redirect('/');
+});
+
+// Εκκίνηση του Server
+app.listen(PORT, () => {
+    console.log(`Ο Server τρέχει στη θύρα ${PORT}`);
+});
